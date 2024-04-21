@@ -1,28 +1,180 @@
 /** @format */
 
 .formContainer {
-  background-color: aquamarine;
+  background-color: #7fffd4;
   height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
 
   .formWrapper {
-    padding: 3rem 3rem;
+    padding: 2rem 2.5rem;
     background-color: white;
     border-radius: 1rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap:1rem;
+    gap: 1rem;
+
+    .title {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #97f8d8;
+    }
+    .register {
+      color: #cfefe4;
+      font-size: 1rem;
+    }
 
     form {
       display: flex;
       flex-direction: column;
       gap: 1rem;
 
-      input{
-        padding: 5px;
+      input {
+        padding: 10px;
+        width: 20rem;
+        border: none;
+        border-bottom: 1px solid #97f8d8;
+        &::placeholder {
+          color: #c6efe1;
+        }
+      }
+      label {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+
+        span {
+          color: #92f0d1;
+        }
+      }
+      button {
+        background-color: #7fffd4;
+        padding: 10px;
+        border: none;
+        cursor: pointer;
+        color: rgb(255, 255, 255);
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+.home {
+  background-color: #7fffd4;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .container {
+    border: 1px solid white;
+    border-radius: 10px;
+    width: 60%;
+    height: 80%;
+    display: flex;
+
+    .sidebar {
+      flex: 1;
+      border-right: 1px solid #008000;
+      background-color: #46b146;
+
+      .navbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: #008000;
+        height: 50px;
+        padding: 10px;
+        color: white;
+      }
+      .user {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+
+      img {
+        background-color: #ffffff;
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+      button {
+        background-color: #076d07;
+        color: white;
+        font-size: 10px;
+        border: none;
+        cursor: pointer;
+        padding:5px
+      }
+      .search {
+        border-bottom: 1px solid #076d07;
+
+        .searchForm {
+          padding: 10px;
+
+          input {
+            background-color: transparent;
+            border: none;
+            color: white;
+            outline: none;
+          }
+        }
+      }
+      .userChat {
+        display: flex;
+        color: white;
+        gap: 10px;
+        align-items: center;
+        margin-bottom: 7px;
+        margin-top: 7px;
+
+        &:hover {
+          background-color: #2b9b2b;
+        }
+        img {
+          background-color: #ffffff;
+          width: 50px;
+          height: 50px;
+          border-radius: 50%;
+          object-fit: cover;
+        }
+        .userChatInfo {
+          span {
+            font-size: 18px;
+            font-weight: 500;
+          }
+          p {
+            font-size: 12px;
+            font-weight: 400;
+          }
+        }
+      }
+    }
+    .chat {
+      flex: 2;
+      background-color: #ffffff;
+
+      .chatInfo{
+        background-color: #54ae54;
+        height:50px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+
+        span{
+          margin-left:5px;
+        }
+
+        img{
+          width:30px;
+          margin-right: 30px;
+        }
       }
     }
   }

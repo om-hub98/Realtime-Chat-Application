@@ -1,13 +1,15 @@
 import React from 'react'
-import Login from './components/pages/Login'
-import Register from './components/pages/Register'
+import Login from './pages/Login'
+import Register from './pages/Register'
 import './style.scss';
+import Home from './pages/Home';
 
 const App = () => {
   return (
     <div>
-      {/* <Login /> */}
-      <Register />
+      <Home/>
+       {/* <Login /> */}
+      {/* <Register /> */}
     </div>
   )
 }

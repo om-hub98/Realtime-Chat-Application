@@ -1,11 +1,11 @@
 import React from 'react'
 
-const Home = () => {
+const Input = () => {
   return (
     <div>
-       Home page
+      Input
     </div>
   )
 }
 
-export default Home
+export default Input
