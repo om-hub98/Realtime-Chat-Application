@@ -4,6 +4,8 @@ import React from "react";
 import MoreOption from "../images/menu_12800847.png";
 import Video from "../images/video-camera_1159798.png";
 import AddPeople from "../images/user-add_3917582.png";
+import Messages from "./Messages";
+import Input from "./Input";
 
 const Chat = () => {
   return (
@@ -16,6 +18,8 @@ const Chat = () => {
           <img src={MoreOption} alt="More Option" />
         </div>
       </div>
+      <Messages/>
+      <Input/>
     </div>
   );
 };
