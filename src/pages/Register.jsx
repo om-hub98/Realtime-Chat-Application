@@ -16,14 +16,7 @@ const Register = () => {
     const email = e.target[1].value;
     const password = e.target[2].value;
     const file = e.target[3].value;
-    console.log(
-      "name: ",
-      displayName,
-      " , email : ",
-      email,
-      ", password : ",
-      password
-    );
+    console.log("name: ",displayName," , email : ", email, ", password : ", password);
 
     try {
       const response =await createUserWithEmailAndPassword(auth, email, password);
@@ -38,6 +31,7 @@ const Register = () => {
         () => {
           // Handle successful uploads on complete
           getDownloadURL(uploadTask.snapshot.ref).then(async(downloadURL) => {
+            console.log('File available at', downloadURL);
             await updateProfile(response.user,{
                 displayName,
                 photoURL: downloadURL
