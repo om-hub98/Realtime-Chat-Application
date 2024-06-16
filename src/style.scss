@@ -92,8 +92,8 @@
   .container {
     border: 1px solid white;
     border-radius: 10px;
-    width: 60%;
-    height: 80%;
+    width: 80%;
+    height: 90%;
     display: flex;
 
     .sidebar {
@@ -145,10 +145,15 @@
           padding: 10px;
 
           input {
-            background-color: transparent;
+            //background-color: transparent;
             border: none;
             color: white;
             outline: none;
+            border-radius: 9px;
+            height: 1.8rem;
+            width: 100%;
+            padding: 0px 10px;
+
           }
         }
       }

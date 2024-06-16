@@ -1,7 +1,7 @@
 /** @format */
 import React, { useState } from "react";
 import AvatarIcon from "../images/image_13406954.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, db, storage } from "../firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
@@ -9,6 +9,8 @@ import { doc, setDoc } from "firebase/firestore";
 
 const Register = () => {
   const [error, setError] = useState(false);
+  const navigate=useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -19,19 +21,17 @@ const Register = () => {
     console.log("name: ",displayName," , email : ", email, ", password : ", password);
 
     try {
-      const response =await createUserWithEmailAndPassword(auth, email, password);
+      const response = await createUserWithEmailAndPassword(auth, email, password);
       const storageRef = ref(storage, displayName);
-
       const uploadTask = uploadBytesResumable(storageRef, file);
-
-      uploadTask.on(
+      uploadTask.on('state_changed',
+        null,
         (error) => {
           setError(true);
         },
         () => {
           // Handle successful uploads on complete
           getDownloadURL(uploadTask.snapshot.ref).then(async(downloadURL) => {
-            console.log('File available at', downloadURL);
             await updateProfile(response.user,{
                 displayName,
                 photoURL: downloadURL
@@ -43,6 +43,7 @@ const Register = () => {
               email,
               photoURL:downloadURL
             })
+            navigate("/login")
           });
         }
       );
@@ -79,7 +80,7 @@ const Register = () => {
         </form>
         <p>
           Do you have an account?
-          <Link style={{ cursor: "pointer" }} to="/">
+          <Link style={{ cursor: "pointer" }} to="/login">
             Login Here
           </Link>
         </p>
