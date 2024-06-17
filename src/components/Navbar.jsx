@@ -1,13 +1,18 @@
-import React from "react";
+import React, { useContext } from "react";
 import Logout from "../pages/Logout";
+import { AuthContext } from "../context/AuthContext";
 
 const Navbar = () => {
+
+  const {currentUser}=useContext(AuthContext);
+  console.log("Current :",currentUser.photoURL);
+
   return (
     <div className="navbar">
       <span className="logo">LetsChat</span>
       <div className="user">
-        <img src="https://images.pexels.com/photos/674010/pexels-photo-674010.jpeg?auto=compress&cs=tinysrgb&w=600" alt=""/>
-        <span className="displayname">Omraj</span>
+        <img src={currentUser.photoURL} alt="UserProfile" style={{width:"40px",height:"40px"}}/>
+        <span className="displayname">{currentUser.displayName}</span>
         <Logout/>
       </div>
     </div>

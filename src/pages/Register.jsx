@@ -43,6 +43,8 @@ const Register = () => {
               email,
               photoURL:downloadURL
             })
+
+            await setDoc(doc(db,"userChats",response.user.uid),{})
             navigate("/login")
           });
         }
