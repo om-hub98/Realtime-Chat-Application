@@ -1,27 +1,10 @@
 import React from 'react'
 import Message from './Message'
 
-const Messages = () => {
+const Messages = ({chatId}) => {
   return (
-    <div className="messages">
-        <Message/>
-        <Message/>
-        <Message/>
-        <Message/>
-        <Message/>
-        <Message/>
-        <Message/>
-        <Message/>
-        <Message/>
-        <Message/>
-        <Message/>
-        <Message/>
-        <Message/>
-        <Message/>
-        <Message/>
-        <Message/>
-        <Message/>
-        <Message/>
+    <div className="messages" style={{overflowY: "scroll", padding: "1rem"}}>
+        <Message chatId={{chatId}}/>
     </div>
   )
 }

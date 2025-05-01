@@ -8,7 +8,7 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { doc, setDoc } from "firebase/firestore";
 
 const Register = () => {
-  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(false);
   const navigate=useNavigate();
 
   const handleSubmit = async (e) => {
@@ -17,7 +17,7 @@ const Register = () => {
     const displayName = e.target[0].value;
     const email = e.target[1].value;
     const password = e.target[2].value;
-    const file = e.target[3].value;
+    const file = e.target[3].files[0];
     console.log("name: ",displayName," , email : ", email, ", password : ", password);
 
     try {
@@ -26,8 +26,9 @@ const Register = () => {
       const uploadTask = uploadBytesResumable(storageRef, file);
       uploadTask.on('state_changed',
         null,
-        (error) => {
-          setError(true);
+        (uploadError) => {
+          console.log("Error inside : ",uploadError?.message);
+          setErrorMessage(uploadError?.message);
         },
         () => {
           // Handle successful uploads on complete
@@ -44,13 +45,14 @@ const Register = () => {
               photoURL:downloadURL
             })
 
-            await setDoc(doc(db,"userChats",response.user.uid),{})
+            //await setDoc(doc(db,"chats",response.user.uid),{})
             navigate("/login")
           });
         }
       );
-    } catch {
-      setError(true);
+    } catch(error) {
+      console.log("Error outside : ",error?.message);
+      setErrorMessage(error?.message || "Something went wrong!!");
     }
   };
 
@@ -78,7 +80,7 @@ const Register = () => {
             <span>Add an Avatar</span>
           </label>
           <button className="signup">Sign Up</button>
-          {error && <span style={{ color: "red" }}>Something Wrong!!</span>}
+          {errorMessage && <span style={{ color: "red" }}>{errorMessage}</span>}
         </form>
         <p>
           Do you have an account?

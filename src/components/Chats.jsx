@@ -1,40 +1,73 @@
 /** @format */
 
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { collection, getDocs } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
+import { db } from "../firebase";
+import { doc, getDoc } from "firebase/firestore";
 
-const Chats = () => {
+
+const Chats = ({setSelectedUser, setChatId}) => {
+  const [userChats, setUserChats] = useState([]);
+  const auth = getAuth();
+  const currentUser = auth?.currentUser;
+
+
+  useEffect(() => { 
+    
+    const fetchUserChats = async () => {
+        const chats = await fetchConversations(currentUser.uid, db);
+        const chatsWithUser = await Promise.all(
+          chats.map(async (chat) => {
+            const user = await fetchUserData(chat.otherUid, db);
+            return { ...chat, user };
+          })
+        );
+  
+        setUserChats(chatsWithUser);
+    };
+    fetchUserChats();
+  }, [currentUser?.uid]);
+
+  async function fetchConversations(currentUid, db) {
+    const chatsRef = collection(db, "chats");
+    const snapshot = await getDocs(chatsRef);
+    const userChats = [];
+  
+    snapshot.forEach(doc => {
+      if (doc.id.includes(currentUid)) {
+        const otherUid = doc.id.replace(currentUid, '').replace('_', '');
+        userChats.push({ chatId: doc.id, otherUid });
+      }
+    });
+    return userChats;
+  }
+
+  async function fetchUserData(uid, db) {
+    const userRef = doc(db, "users", uid);
+    const userSnap = await getDoc(userRef);
+    return userSnap.exists() ? userSnap.data() : null;
+  }
+
+  console.log("User Chats: ", userChats);
+
+  function getSelectedUser(userChat) {
+    setSelectedUser(userChat?.user);
+    setChatId(userChat?.chatId);
+    console.log("Selected User: ", userChat);
+  }
+
   return (
     <div className="chats">
-      <div className="userChat">
-        <img
-          src="https://images.pexels.com/photos/674010/pexels-photo-674010.jpeg?auto=compress&cs=tinysrgb&w=600"
-          alt=""
-        />
-        <div className="userChatInfo">
-          <span>Omraj</span>
-          <p>Hello Om</p>
+      {userChats.map((userChat) => (
+        <div className="userChat" key={userChat.chatId} onClick={() => getSelectedUser(userChat)}>
+          <img src={userChat?.user?.img} alt={userChat?.user?.displayName} />
+          <div className="userChatInfo">
+            <span>{userChat?.user?.displayName}</span>
+            <p>{userChat?.user?.message}</p>
+          </div>
         </div>
-      </div>
-      <div className="userChat">
-        <img
-          src="https://images.pexels.com/photos/674010/pexels-photo-674010.jpeg?auto=compress&cs=tinysrgb&w=600"
-          alt=""
-        />
-        <div className="userChatInfo">
-          <span>Omraj</span>
-          <p>Hello Om</p>
-        </div>
-      </div>
-      <div className="userChat">
-        <img
-          src="https://images.pexels.com/photos/674010/pexels-photo-674010.jpeg?auto=compress&cs=tinysrgb&w=600"
-          alt=""
-        />
-        <div className="userChatInfo">
-          <span>Omraj</span>
-          <p>Hello Om</p>
-        </div>
-      </div>
+      ))}
     </div>
   );
 };
