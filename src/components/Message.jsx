@@ -1,15 +1,15 @@
 /** @format */
 
 import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
-import { db } from "../firebase";
-import { getAuth } from "firebase/auth";
+import React, { useContext, useEffect, useState } from "react";
+import { db } from "../services/firebase";
+import { AuthContext } from "../context/AuthContext";
 
 const Message = ({ chatId }) => {
+  const {currentUser} = useContext(AuthContext);
   const [messages, setMessages] = useState([]);
-  const auth = getAuth();
 
-  const currentUserId = auth.currentUser?.uid;
+  const currentUserId = currentUser?.uid;
 
   console.log("Chat Id FROM message : ", chatId.chatId.chatId);
 

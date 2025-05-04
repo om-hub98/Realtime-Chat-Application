@@ -1,29 +1,15 @@
-/** @format */
-import React, { useEffect, useState } from "react";
-import AvatarIcon from "../images/image_13406954.png";
-import { Link, useNavigate } from "react-router-dom";
-import { auth } from "../firebase";
-import { signInWithEmailAndPassword } from "firebase/auth";
 
+import { Link } from "react-router-dom";
+import useLogin from "../hooks/useLogin";
 
 const Login = () => {
+  const { login, error } = useLogin();
 
-  const[error,setError]=useState(false);
-  const navigate=useNavigate();
-
-  const handleSubmit=async (e)=>{
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const email=e.target[0].value;
-    const password=e.target[1].value;
-
-    try{
-       await signInWithEmailAndPassword(auth, email, password)
-        navigate("/");
-    }catch(err) {
-      setError(true);
-    }
-
+    const email = e.target[0].value;
+    const password = e.target[1].value;
+    login(email, password);
   }
 
   return (
@@ -37,7 +23,7 @@ const Login = () => {
           <button className="login-btn">Login</button>
           {error && <span style={{ color: "red" }}>Something Wrong!!</span>}
         </form>
-        <p>Don't have an account?<Link style={{ cursor: "pointer" }} to="/signup">Register Here</Link></p>
+        <p>Don't have an account?<Link style={{ cursor: "pointer", paddingLeft:"0.3rem" }} to="/signup">Register Here</Link></p>
       </div>
     </div>
   );

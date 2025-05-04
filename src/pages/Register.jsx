@@ -1,59 +1,18 @@
-/** @format */
-import React, { useState } from "react";
+import React from "react";
 import AvatarIcon from "../images/image_13406954.png";
-import { Link, useNavigate } from "react-router-dom";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { auth, db, storage } from "../firebase";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { doc, setDoc } from "firebase/firestore";
+import { Link } from "react-router-dom";
+import useRegister from "../hooks/useRegister";
 
 const Register = () => {
-  const [errorMessage, setErrorMessage] = useState(false);
-  const navigate=useNavigate();
+  const { registerUser, errorMessage } = useRegister();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const displayName = e.target[0].value;
     const email = e.target[1].value;
     const password = e.target[2].value;
     const file = e.target[3].files[0];
-    console.log("name: ",displayName," , email : ", email, ", password : ", password);
-
-    try {
-      const response = await createUserWithEmailAndPassword(auth, email, password);
-      const storageRef = ref(storage, displayName);
-      const uploadTask = uploadBytesResumable(storageRef, file);
-      uploadTask.on('state_changed',
-        null,
-        (uploadError) => {
-          console.log("Error inside : ",uploadError?.message);
-          setErrorMessage(uploadError?.message);
-        },
-        () => {
-          // Handle successful uploads on complete
-          getDownloadURL(uploadTask.snapshot.ref).then(async(downloadURL) => {
-            await updateProfile(response.user,{
-                displayName,
-                photoURL: downloadURL
-            })
-
-            await setDoc(doc(db,"users",response.user.uid),{
-              uid: response.user.uid,
-              displayName,
-              email,
-              photoURL:downloadURL
-            })
-
-            //await setDoc(doc(db,"chats",response.user.uid),{})
-            navigate("/login")
-          });
-        }
-      );
-    } catch(error) {
-      console.log("Error outside : ",error?.message);
-      setErrorMessage(error?.message || "Something went wrong!!");
-    }
+    registerUser(displayName, email, password, file);
   };
 
   return (
@@ -62,28 +21,19 @@ const Register = () => {
         <span className="title">LetsChat</span>
         <span className="register">Register</span>
         <form onSubmit={handleSubmit}>
-          <input type="text" className="name" placeholder="Display name" />
-          <input type="text" className="email" placeholder="Email" />
-          <input type="password" className="password" placeholder="Password" />
-          <input
-            style={{ display: "none" }}
-            type="file"
-            className="file"
-            id="file"
-          />
+          <input type="text" placeholder="Display name" />
+          <input type="text" placeholder="Email" />
+          <input type="password" placeholder="Password" />
+          <input style={{ display: "none" }} type="file" id="file" />
           <label htmlFor="file">
-            <img
-              style={{ width: "50px", height: "50px" }}
-              src={AvatarIcon}
-              alt="avatar"
-            />
+            <img src={AvatarIcon} alt="avatar" style={{ width: "50px", height: "50px" }} />
             <span>Add an Avatar</span>
           </label>
           <button className="signup">Sign Up</button>
           {errorMessage && <span style={{ color: "red" }}>{errorMessage}</span>}
         </form>
         <p>
-          Do you have an account?
+          Do you have an account?{" "}
           <Link style={{ cursor: "pointer" }} to="/login">
             Login Here
           </Link>

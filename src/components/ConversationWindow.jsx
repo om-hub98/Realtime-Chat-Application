@@ -1,13 +1,13 @@
-/** @format */
-
-import React from "react";
+import React, { useContext } from "react";
 import MoreOption from "../images/menu_12800847.png";
 import Video from "../images/video-camera_1159798.png";
 import AddPeople from "../images/user-add_3917582.png";
 import Messages from "./Messages";
 import Input from "./Input";
+import { ChatContext } from "../context/ChatContext";
 
-const Chat = ({selectedUser, chatId}) => {
+const ConversationWindow = () => {
+  const {selectedUser, chatId} = useContext(ChatContext);
 
   return (
     <div className="chat">
@@ -20,9 +20,9 @@ const Chat = ({selectedUser, chatId}) => {
         </div>
       </div>
       <Messages chatId={{chatId}}/>
-      <Input chatId={{chatId}}/>
+      <Input />
     </div>
   );
 };
 
-export default Chat;
+export default ConversationWindow;

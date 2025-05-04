@@ -1,16 +1,18 @@
 /** @format */
 
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
-import { db } from "../firebase";
+import { db } from "../services/firebase";
 import { doc, getDoc } from "firebase/firestore";
+import { ChatContext } from "../context/ChatContext";
 
 
-const Chats = ({setSelectedUser, setChatId}) => {
+const Chats = () => {
+  const {setSelectedUser, setChatId } = useContext(ChatContext);
+  const {currentUser} = useContext(ChatContext);
+
   const [userChats, setUserChats] = useState([]);
-  const auth = getAuth();
-  const currentUser = auth?.currentUser;
 
 
   useEffect(() => { 
@@ -54,14 +56,13 @@ const Chats = ({setSelectedUser, setChatId}) => {
   function getSelectedUser(userChat) {
     setSelectedUser(userChat?.user);
     setChatId(userChat?.chatId);
-    console.log("Selected User: ", userChat);
   }
 
   return (
     <div className="chats">
       {userChats.map((userChat) => (
         <div className="userChat" key={userChat.chatId} onClick={() => getSelectedUser(userChat)}>
-          <img src={userChat?.user?.img} alt={userChat?.user?.displayName} />
+          <img src={userChat?.user?.photoURL} alt={userChat?.user?.displayName} />
           <div className="userChatInfo">
             <span>{userChat?.user?.displayName}</span>
             <p>{userChat?.user?.message}</p>
